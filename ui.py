@@ -35,14 +35,14 @@ class QuizInterface:
         )
         self.difficulty_label.grid(row=2, column=0,columnspan=2)
 
-        self.canvas = Canvas(width=300, height=250, bg="white")
+        self.canvas = Canvas(width=360, height=250, bg="white")
         self.question_text = self.canvas.create_text(
-            150,125,
+            180,125,
             width=280,
             text="placeholder",
             fill=THEME_COLOR,
             font = (
-                "Ariel",
+                "Arial",
                 20,
                 "italic"
             )
@@ -73,9 +73,13 @@ class QuizInterface:
 
 
     def get_next_question(self):
+        if self.quiz.question_number == 10:
+            self.the_end()
+
         q_text = self.quiz.question()
-        self.canvas.itemconfig(self.question_text, text=q_text)
-        self.category_label.config(
+        self.canvas.itemconfig(self.question_text, text=q_text, fill="black")
+        self.canvas.config(bg="white")
+        self.score_label.config(
             text=f"score: {self.quiz.score}"
         )
 
@@ -92,8 +96,20 @@ class QuizInterface:
     def f_button(self):
         self.feedback(self.quiz.is_correct(answer='False'))
 
-    def feedback(self, answer: str):
-        self.canvas.config(bg="blue")
-        self.win.after(1000)
-        self.canvas.config(bg="white")
-        self.get_next_question()
+    def feedback(self, answer: bool):
+        self.canvas.itemconfig(self.question_text, fill="white")
+
+        if answer:
+            self.canvas.config(bg="green")
+        else:
+            self.canvas.config(bg="red")
+
+
+        self.win.after(1000, self.get_next_question)
+
+    def the_end(self):
+        self.canvas.itemconfig(self.question_text, text = "The End")
+        self.true_button.config(state="disabled")
+        self.false_button.config(state="disabled")
+        self.win.after(1000, exit(0))
+

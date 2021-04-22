@@ -11,7 +11,6 @@ class QuizBrain:
         self.question_number = 0
         self.question_list = q_list
         self.score = 0
-        # self.no_of_questions_to_ask = 10
         self.page_width = 70
 
     def nice_text(self, question: str) -> str:
@@ -45,6 +44,10 @@ class QuizBrain:
         return self.q_data['difficulty']
 
     def is_correct(self, answer: str) -> bool:
-        if self.question_list[self.question_number]['correct_answer'] == answer:
+        if self.question_list[self.question_number -1]['correct_answer'] == answer:
             self.score += 1
+            return True
+        else:
+            return False
+
 
