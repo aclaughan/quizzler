@@ -108,8 +108,11 @@ class QuizInterface:
         self.win.after(1000, self.get_next_question)
 
     def the_end(self):
-        self.canvas.itemconfig(self.question_text, text = "The End")
+        self.canvas.itemconfig(
+            self.question_text,
+            text = f"G A M E   O V E R\n   final score: {self.quiz.score}"
+        )
         self.true_button.config(state="disabled")
         self.false_button.config(state="disabled")
-        self.win.after(1000, exit(0))
+
 
